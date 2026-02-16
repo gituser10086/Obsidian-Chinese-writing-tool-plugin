@@ -6,3 +6,16 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+.nav-file-title[data-word-count]::after {
+  content: attr(data-word-count);
+  opacity: 0.6;
+  margin-left: 6px;
+}
+
+.nav-folder-title[data-word-count]::after {
+  content: attr(data-word-count);
+  opacity: 0.6;
+  margin-left: 5px;
+}
+
+
