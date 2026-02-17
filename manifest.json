@@ -1,11 +1,11 @@
 {
-	"id": "chinese-novel-formatting",
-	"name": "Chinese novel formatting",
+	"id": "chinese-writing-tool",
+	"name": "Chinese writing tool",
 	"version": "1.0.0",
 	"minAppVersion": "1.11.7",
 	"description": "A simple word count and formatting tool for Chinese novel writing.",
 	"author": "cocoala",
 	"authorUrl": "https://github.com/gituser10086",
-	"fundingUrl": "https://github.com/gituser10086/Obsidian-Chinese-novel-formatting-plugin",
+	"fundingUrl": "https://github.com/gituser10086/Obsidian-Chinese-writing-tool-plugin",
 	"isDesktopOnly": false
 }

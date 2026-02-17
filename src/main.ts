@@ -18,7 +18,7 @@ interface FileItem {
   selfEl: HTMLElement;
 }
 
-export default class ChineseNovelFormattingPlugin extends Plugin {
+export default class ChineseWritingToolPlugin extends Plugin {
   statusBarItem: HTMLElement;
 
   // ===== CACHE =====
@@ -26,7 +26,7 @@ export default class ChineseNovelFormattingPlugin extends Plugin {
   folderCounts: Map<string, number> = new Map();
 
   async onload() {
-    console.log("Chinese novel fomatting plugin Loaded");
+    console.log("Chinese writing tool Loaded");
 
     // ===== STATUS BAR =====
     this.statusBarItem = this.addStatusBarItem();
