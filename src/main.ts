@@ -1,25 +1,19 @@
 import {
   Plugin,
-  MarkdownView,
   TFile,
   TAbstractFile,
-  WorkspaceLeaf,
-  Notice,
+  WorkspaceLeaf
 } from "obsidian";
 
-import { formatContent } from "./formatting";
-import { countCharacters } from "./count";
+// ...existing code...
 import { updateExplorer as uiUpdateExplorer, updateStatusBar as uiUpdateStatusBar } from "./ui";
 import * as fileOps from "./fileOps";
 import { registerAllEvents } from "./events";
 
-interface FileItem {
-  titleEl?: HTMLElement;
-  selfEl: HTMLElement;
-}
+// ...existing code...
 
 export default class ChineseWritingToolPlugin extends Plugin {
-  statusBarItem: HTMLElement;
+  statusBarItem!: HTMLElement;
 
   // ===== CACHE =====
   fileCounts: Map<string, number> = new Map();
@@ -44,8 +38,13 @@ export default class ChineseWritingToolPlugin extends Plugin {
 
     // ===== INITIAL SCAN =====
     await this.initializeCounts();
-    this.updateExplorer();
     this.updateStatusBar();
+
+    // The file explorer may not exist yet when onload() runs.
+    // Wait for layout to be ready, then render counts.
+    this.app.workspace.onLayoutReady(() => {
+      this.updateExplorer();
+    });
   }
 
   // =========================

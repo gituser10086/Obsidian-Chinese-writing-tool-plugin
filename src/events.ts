@@ -1,11 +1,23 @@
-import { Plugin, TFile, Notice } from "obsidian";
+import { TFile, Notice } from "obsidian";
+import ChineseWritingToolPlugin from "./main";
 import { formatContent } from "./formatting";
+import { getFileExplorerLeaf } from "./ui";
 
-export function registerAllEvents(plugin: Plugin, debouncedRecount: (file: TFile) => void) {
+export function registerAllEvents(plugin: ChineseWritingToolPlugin, debouncedRecount: (file: TFile) => void) {
   // Active leaf change (status bar)
   plugin.registerEvent(
     plugin.app.workspace.on("active-leaf-change", () => {
-      (plugin as any).updateStatusBar();
+      plugin.updateStatusBar();
+    })
+  );
+
+  // Layout change — re-render counts when the file explorer appears
+  // (e.g., user opens the sidebar after plugin load)
+  plugin.registerEvent(
+    plugin.app.workspace.on("layout-change", () => {
+      if (getFileExplorerLeaf(plugin.app)) {
+        plugin.updateExplorer();
+      }
     })
   );
 
@@ -22,8 +34,8 @@ export function registerAllEvents(plugin: Plugin, debouncedRecount: (file: TFile
   plugin.registerEvent(
     plugin.app.vault.on("create", async (file) => {
       if (file instanceof TFile) {
-        await (plugin as any).recalculateFile(file);
-        (plugin as any).updateExplorer(file);
+        await plugin.recalculateFile(file);
+        plugin.updateExplorer(file);
       }
     })
   );
@@ -41,8 +53,8 @@ export function registerAllEvents(plugin: Plugin, debouncedRecount: (file: TFile
   plugin.registerEvent(
     plugin.app.vault.on("delete", (file) => {
       if (file instanceof TFile) {
-        (plugin as any).removeFile(file.path);
-        (plugin as any).updateExplorer(file);
+        plugin.removeFile(file.path);
+        plugin.updateExplorer(file);
       }
     })
   );
@@ -51,8 +63,8 @@ export function registerAllEvents(plugin: Plugin, debouncedRecount: (file: TFile
   plugin.registerEvent(
     plugin.app.vault.on("rename", async (file, oldPath) => {
       if (file instanceof TFile) {
-        await (plugin as any).handleRename(file, oldPath);
-        (plugin as any).updateExplorer(file);
+        await plugin.handleRename(file, oldPath);
+        plugin.updateExplorer(file);
       }
     })
   );
@@ -67,8 +79,8 @@ export function registerAllEvents(plugin: Plugin, debouncedRecount: (file: TFile
             const formatted = formatContent(content);
             if (formatted !== content) {
               await plugin.app.vault.modify(file, formatted);
-              await (plugin as any).recalculateFile(file);
-              (plugin as any).updateExplorer(file);
+              await plugin.recalculateFile(file);
+              plugin.updateExplorer(file);
               new Notice("Formatted file");
             } else {
               new Notice("No formatting changes required");
