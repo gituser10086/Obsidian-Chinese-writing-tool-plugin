@@ -9,6 +9,7 @@ import {
 import { updateExplorer as uiUpdateExplorer, updateStatusBar as uiUpdateStatusBar } from "./ui";
 import * as fileOps from "./fileOps";
 import { registerAllEvents } from "./events";
+import { registerCommands } from "./commands";
 
 // ...existing code...
 
@@ -35,6 +36,9 @@ export default class ChineseWritingToolPlugin extends Plugin {
 
     // Register all events in external module
     registerAllEvents(this, debouncedRecount);
+
+    // Register editor commands
+    registerCommands(this);
 
     // ===== INITIAL SCAN =====
     await this.initializeCounts();
